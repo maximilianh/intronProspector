@@ -143,9 +143,15 @@ public:
         return cnt;
     }
 
+    // Trim read counts to fit in BED score restriction or 0..1000
+    static unsigned read_count_to_bed_score(unsigned read_count) {
+        return (read_count <= 1000) ? read_count : 1000;
+    }
+
     // naive mapping to ucsc chrom name
     const string make_ucsc_chrom(const string& chrom) const {
-        if (chrom.find_first_not_of("0123456789XY") == std::string::npos) {
+        if ((chrom.find_first_not_of("0123456789") == std::string::npos)
+            || (chrom == "X") || (chrom == "Y")) {
             return string("chr") + chrom;
         } else if (chrom == "MT") {
             return "chrM";
@@ -165,7 +171,7 @@ public:
             out << chrom;
         }        
         out << "\t" << anchor_start << "\t" << anchor_end
-            << "\t" << "sj" << ijunc << "\t" << total_read_count() << "\t" << strand
+            << "\t" << "sj" << ijunc << "\t" << read_count_to_bed_score(total_read_count()) << "\t" << strand
             << "\t" << anchor_start << "\t" << anchor_end
             << "\t" << "255,0,0" << "\t" << 2
             << "\t" << intron_start - anchor_start << "," << anchor_end - intron_end
@@ -183,7 +189,7 @@ public:
             out << chrom;
         }        
         out << "\t" << intron_start << "\t" << intron_end
-            << "\t" << "sj" << ijunc << "\t" << total_read_count() << "\t" << strand << endl;
+            << "\t" << "sj" << ijunc << "\t" << read_count_to_bed_score(total_read_count()) << "\t" << strand << endl;
     }
 
     // Print header for junction call TSV

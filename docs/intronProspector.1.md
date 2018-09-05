@@ -43,7 +43,7 @@ Options
 > Strand specificity of RNA library preparation.  Use `UN` for unstranded, `RF` for first-strand, `FR` for second-strand (case-insensitive).  The default is `UN`.  This is used to set the strand in the junction-format BED file.
 
 `-U, --map-to-ucsc`
-> Naively generate UCSC chromosome names in TSV and BED files.  This pre-pends `chr` to numeric names and change `MT` to `chrMT`, other name are not modified.  This will not produce the correct results for reference sequences.  This does not modify records passed through (-p).
+> Naively generate UCSC chromosome names in TSV and BED files.  This pre-pends `chr` to numeric and X/Y names and change `MT` to `chrMT`, other name are not modified.  This will not produce the correct results for other sequences such as alts, patches, and unmapped sequences.  It does not modify records passed through (-p).
 
 `-c FILE, --intron-calls=FILE`
 
@@ -60,11 +60,11 @@ Options
 
 `-j FILE, --junction-bed=FILE`
 
-> Write the junction calls and support anchors to this file.  This is in the same format as ToHat `junctions.bed` and `regtools junction extract` output.  It UCSC BED track, with each junction consists of two connected BED blocks, where each block is as long as the maximal overhang of any read spanning the junction. The score is the number of alignments spanning the junction.
+> Write the junction calls and support anchors to this file.  This is in the same format as ToHat `junctions.bed` and `regtools junction extract` output.  It UCSC BED track, with each junction consists of two connected BED blocks, where each block is as long as the maximal overhang of any read spanning the junction. The score is the number of alignments spanning the junction, with a maximum score of 1000 for UCSC browser compatibility.
 
 `-n FILE, --intron-bed=FILE`
 
-> Write the intron BED with the bounds of the intron. The score is the number of alignments spanning the junction.
+> Write the intron BED with the bounds of the intron. The score is the number of alignments spanning the junction, with a maximum score of 1000 for UCSC browser compatibility.
 
 `-p FILE, --pass-through=FILE`
 
